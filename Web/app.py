@@ -5,11 +5,12 @@ import numpy as np  # Arithmetic & Science
 import serial  # To communicate with Arduino
 import time  # Calculating time
 import cv2  # Computer vision
+from imutils.video import VideoStream # Better Video
 
 CONTROLLER = "RIGHT"  # The hand controlling the motion
-SER_MODE = True  # If communcations are activated
+SER_MODE = False  # If communcations are activated
 app = Flask(__name__)  # Initialzing the Flask app
-camera = cv2.VideoCapture(0)  # Initialzing Camera
+camera = VideoStream(usePiCamera=False).start() # Initializing Webcam
 if SER_MODE:
     ser = serial.Serial("COM5", 9600)  # Initialzing Communications
 
@@ -171,10 +172,10 @@ class Camera:
             frame_pil
         )  # Initialzing the drawing capabilties of text on the frame
         draw.text(
-            (20, 15), f"MOTION: {motion}", font=font, fill=(38, 163, 209, 1)
+            (20, 15), f"MOTION: {motion}", font=font, fill=(255, 255, 255, 1)
         )  # Drawing text (Motion information)
         draw.text(
-            (500, 15), f"FPS: {fps}", font=font, fill=(38, 163, 209, 1)
+            (515, 15), f"FPS: {fps}", font=font, fill=(255, 255, 255, 1)
         )  # Drawing text (FPS information)
 
     def process_frame(self):
@@ -184,7 +185,7 @@ class Camera:
         None
         """
 
-        success, frame = self.camera.read()  # Getting the frame ready
+        frame = self.camera.read()  # Getting the frame ready
         frame = cv2.flip(frame, 1)  # Flipping the frame to avoid mirroring
         results = self.model.process(
             frame
@@ -230,7 +231,7 @@ class Camera:
         if SER_MODE:
             ser.write(motion.encode())  # Sending Motion Data
 
-        return [success, frame]
+        return frame
 
     def mainloop(self):
         """
@@ -240,15 +241,12 @@ class Camera:
         """
 
         while True:
-            success, frame = self.process_frame()
-            if not success:
-                break
-            else:
-                ret, buffer = cv2.imencode(".jpg", frame)
-                frame = buffer.tobytes()
-                yield (
-                    b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n"
-                )
+            frame = self.process_frame()
+            _, buffer = cv2.imencode(".jpg", frame)
+            frame = buffer.tobytes()
+            yield (
+                b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n"
+            )
 
         if SER_MODE:
             ser.close()  # Closing Serial Communications
@@ -273,4 +271,4 @@ def credits():
 
 
 if __name__ == "__main__":
-    app.run(debug=True, use_reloader=False)
+    app.run(debug=False, use_reloader=False)
