@@ -1,5 +1,5 @@
 from flask import Flask, render_template, Response, url_for # Web utilities
-from imutils.video import VideoStream # Better bideo
+from imutils.video import VideoStream # Better video
 from camera import Camera # Importing camera module
 import serial  # To communicate with Arduino
 
