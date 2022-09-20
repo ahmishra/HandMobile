@@ -6,5 +6,5 @@ Python: >3.5<br>
 Arduino: UNO
 
 ## Run:
-Run `controller.py` in the `Web` folder after installing the dependencies :)
-[Make sure to connec Arduino]
+Run `controller.py` in the `Web` folder after installing the dependencies :)<br>
+[Make sure to connect Arduino]
