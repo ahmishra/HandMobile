@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>The HandMobile™</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Nabla&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
+</head>
+
+<style type="text/css">
+    body {
+        background-color: #171616;
+    }
+
+    #bg {
+        position: fixed;
+        top: -38%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+    }
+
+    #bg img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        width: 85vh;
+        height: 65vh;
+        border-radius: 5vh;
+        box-shadow: #000 0px 0px 5vh 1vh;
+        border: 1vh solid #111;
+    }
+</style>
+
+<body>
+    <div class="center" style="text-align: center; margin-top: 5vh; color: white">
+        <h1 style="font-family: 'Nabla', cursive; font-size: 5vh">
+            The HandMobile™
+        </h1>
+        <p style="
+          font-family: 'Pacifico', cursive;
+          font-size: 3.5vh;
+          font-weight: bold;
+          margin-top: -1vh;
+        ">
+            The best way to keep kids from driving your car.
+        </p>
+    </div>
+    <div id="bg">
+        <img src="{{ url_for('video_feed') }}" />
+    </div>
+</body>
+
+<script type="text/javascript">
+    document.onkeypress = function (e) {
+        if ((e.keyCode = 99)) {
+            window.location.href = "/credits";
+        }
+    };
+</script>
+
+</html>
