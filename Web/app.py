@@ -8,7 +8,7 @@ import cv2  # Computer vision
 from imutils.video import VideoStream # Better Video
 
 CONTROLLER = "RIGHT"  # The hand controlling the motion
-SER_MODE = False  # If communcations are activated
+SER_MODE = True  # If communcations are activated
 app = Flask(__name__)  # Initialzing the Flask app
 camera = VideoStream(usePiCamera=False).start() # Initializing Webcam
 if SER_MODE:
@@ -34,7 +34,7 @@ class Camera:
         self.next_frame_time = 0  # Starting frame time to calculate FPS
         self.prev_frame_time = 0  # Previous frame time to calculate FPS
         self.model = self.mp_hands.Hands(
-            min_detection_confidence=0.5, min_tracking_confidence=0.5
+            min_detection_confidence=0.35, min_tracking_confidence=0.35
         )  # Initialzing the model to track the hand
 
     def draw_markers(self, results, frame):
@@ -271,4 +271,4 @@ def credits():
 
 
 if __name__ == "__main__":
-    app.run(debug=False, use_reloader=False)
+    app.run(debug=False, use_reloader=False, host="0.0.0.0", port="5000")

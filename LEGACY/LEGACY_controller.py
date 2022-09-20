@@ -18,6 +18,7 @@ import mediapipe as mp  # Detecting hands
 import numpy as np  # Arithmetic & Science
 import time  # Calculating time
 import cv2  # Computer Vision
+from imutils.video import VideoStream
 
 mp_draw = mp.solutions.drawing_utils  # Displaying Utilities
 mp_hands = mp.solutions.hands  # Hand detecting model
@@ -38,13 +39,10 @@ hands = mp_hands.Hands(
 )  # Intializing the model to track the hand
 
 
-cap = cv2.VideoCapture(
-    0
-)  # Intializing video capture to detect the hand through the webcam
-
+cap = VideoStream(usePiCamera=False).start()
 
 while True:  # Program loop
-    _, frame = cap.read()  # Getting the frame ready
+    frame = cap.read()  # Getting the frame ready
     frame = cv2.flip(frame, 1)  # Flipping the frame to avoid mirroring
 
 
@@ -165,7 +163,7 @@ while True:  # Program loop
     prev_frame_time = new_frame_time
 
     if DRAW:  # To display extra informatio, (optional, requires DRAW to be activated)
-        fontpath = "Roboto-Bold.ttf"  # Font path
+        fontpath = "Poppins-Regular.ttf"  # Font path
         font = ImageFont.truetype(fontpath, 32)  # Intializing font
         frame_pil = Image.fromarray(
             frame
