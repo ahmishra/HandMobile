@@ -1,22 +1,14 @@
-from flask import Flask, render_template, Response, url_for  # Web utilities
 from PIL import ImageFont, ImageDraw, Image  # Displaying text on screen
 import mediapipe as mp  # Detecting hands
 import numpy as np  # Arithmetic & Science
 import serial  # To communicate with Arduino
 import time  # Calculating time
 import cv2  # Computer vision
-from imutils.video import VideoStream # Better Video
 
-CONTROLLER = "RIGHT"  # The hand controlling the motion
-SER_MODE = True  # If communcations are activated
-app = Flask(__name__)  # Initialzing the Flask app
-camera = VideoStream(usePiCamera=False).start() # Initializing Webcam
-if SER_MODE:
-    ser = serial.Serial("COM5", 9600)  # Initialzing Communications
 
 
 class Camera:
-    def __init__(self, camera):
+    def __init__(self, camera, controller, hardware_enabled=False, ser=None):
         """
         Initialzing variables that are to be used through out the class
         """
@@ -34,8 +26,15 @@ class Camera:
         self.next_frame_time = 0  # Starting frame time to calculate FPS
         self.prev_frame_time = 0  # Previous frame time to calculate FPS
         self.model = self.mp_hands.Hands(
-            min_detection_confidence=0.35, min_tracking_confidence=0.35
+            min_detection_confidence=0.4, min_tracking_confidence=0.4
         )  # Initialzing the model to track the hand
+        self.hardware_enabled = hardware_enabled # Whether hardware is connected
+        if self.hardware_enabled: # If hardware enabled
+            self.ser = ser # Set serial to serial object
+        else:
+            self.ser = None # Else None
+        self.controller = controller.upper() # Controlling hand
+
 
     def draw_markers(self, results, frame):
         """
@@ -135,13 +134,13 @@ class Camera:
         count: The current count of the fingers which are activated
         """
 
-        if count[CONTROLLER] == 1:  # 1 finger in the controlling hand: Forward
+        if count[self.controller] == 1:  # 1 finger in the controlling hand: Forward
             return "F"
-        elif count[CONTROLLER] == 2:  # 2 fingers in the controlling hand: Backward
+        elif count[self.controller] == 2:  # 2 fingers in the controlling hand: Backward
             return "B"
-        elif count[CONTROLLER] == 3:  # 3 fingers in the controlling hand: Right
+        elif count[self.controller] == 3:  # 3 fingers in the controlling hand: Right
             return "R"
-        elif count[CONTROLLER] == 4:  # 4 fingers in the controlling hand: Left
+        elif count[self.controller] == 4:  # 4 fingers in the controlling hand: Left
             return "L"
         return " "
 
@@ -228,8 +227,8 @@ class Camera:
             frame_pil
         )  # Converting PIL friendly-information back into a CV2 frame
 
-        if SER_MODE:
-            ser.write(motion.encode())  # Sending Motion Data
+        if self.hardware_enabled:
+            self.ser.write(motion.encode())  # Sending Motion Data
 
         return frame
 
@@ -248,27 +247,5 @@ class Camera:
                 b"--frame\r\n" b"Content-Type: image/jpeg\r\n\r\n" + frame + b"\r\n"
             )
 
-        if SER_MODE:
-            ser.close()  # Closing Serial Communications
-
-
-@app.route("/")
-def index():
-    return render_template("index.html")
-
-
-@app.route("/video_feed")
-def video_feed():
-    video = Camera(camera)
-    return Response(
-        video.mainloop(), mimetype="multipart/x-mixed-replace; boundary=frame"
-    )
-
-
-@app.route("/credits")
-def credits():
-    return render_template("credits.html")
-
-
-if __name__ == "__main__":
-    app.run(debug=False, use_reloader=False, host="0.0.0.0", port="5000")
+        if self.hardware_enabled:
+            self.ser.close()  # Closing Serial Communications
