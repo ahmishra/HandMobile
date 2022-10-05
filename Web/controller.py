@@ -5,7 +5,10 @@ import serial  # To communicate with Arduino
 
 hardware_enabled = False  # If hardware is enabled
 controller = "right" # Controlling hand
-ser = serial.Serial("COM5", 9600) # Serial object
+if hardware_enabled:
+    ser = serial.Serial("COM6", 9600) # Serial object
+else:
+    ser = None
 
 app = Flask(__name__)  # Initialzing the Flask app
 camera = VideoStream(usePiCamera=False).start() # Initializing Webcam

@@ -26,7 +26,7 @@ class Camera:
         self.next_frame_time = 0  # Starting frame time to calculate FPS
         self.prev_frame_time = 0  # Previous frame time to calculate FPS
         self.model = self.mp_hands.Hands(
-            min_detection_confidence=0.4, min_tracking_confidence=0.4
+            min_detection_confidence=0.5, min_tracking_confidence=0.5
         )  # Initialzing the model to track the hand
         self.hardware_enabled = hardware_enabled # Whether hardware is connected
         if self.hardware_enabled: # If hardware enabled

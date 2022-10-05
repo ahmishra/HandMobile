@@ -1,5 +1,5 @@
-CONTROLLER = "LEFT" if input("Controller [R (def) /L]: ").lower() == "l" else "RIGHT"  # The hand which will be used to control the car
-DRAW = False if input("Verbose [Y (def) /N]: ").lower() == "n" else True  # To display extra information (Motion of the car, FPS, etc.)
+CONTROLLER = "RIGHT"
+DRAW = True
 
 if DRAW:
     b, g, r, a = (

@@ -1,5 +1,7 @@
 #include <AFMotor.h>
+#include <SoftwareSerial.h>
 char command;
+SoftwareSerial BTSerial(9, 10);
 
 AF_DCMotor motor1(1);  
 AF_DCMotor motor2(2);
@@ -7,12 +9,12 @@ AF_DCMotor motor3(3);
 AF_DCMotor motor4(4);
 
 void setup() {
-  Serial.begin(9600);
+  BTSerial.begin(9600);
 }
 
 void loop() {
-  if (Serial.available() > 0) {
-    command = Serial.read();
+  if (BTSerial.available() > 0) {
+    command = BTSerial.read();
     stop_();
     switch(command){
       case 'F':  
@@ -44,7 +46,7 @@ void forward()
   motor3.run(FORWARD);  // Rotate the motor clockwise
   motor4.setSpeed(255); // Define maximum velocity
   motor4.run(FORWARD);  // Rotate the motor clockwise
-}
+} 
 
 void back()
 {
@@ -58,7 +60,7 @@ void back()
   motor4.run(BACKWARD); // Rotate the motor anti-clockwise
 }
 
-void left()
+void right()
 {
   motor1.setSpeed(255); // Define maximum velocity
   motor1.run(BACKWARD); // Rotate the motor anti-clockwise
@@ -70,7 +72,7 @@ void left()
   motor4.run(FORWARD);  // Rotate the motor clockwise
 }
 
-void right()
+void left()
 {
   motor1.setSpeed(255); // Define maximum velocity
   motor1.run(FORWARD);  // Rotate the motor clockwise
