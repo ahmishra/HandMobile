@@ -249,3 +249,5 @@ class Camera:
 
         if self.hardware_enabled:
             self.ser.close()  # Closing Serial Communications
+
+# Aryan Mishra Copyright(C) 2022

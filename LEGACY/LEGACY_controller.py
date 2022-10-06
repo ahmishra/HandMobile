@@ -192,3 +192,5 @@ while True:  # Program loop
         break
         # Break
         exit()  # Quit / Exit
+
+# Aryan Mishra Copyright(C) 2022
