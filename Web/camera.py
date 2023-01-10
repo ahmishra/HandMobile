@@ -222,7 +222,7 @@ class Camera:
         frame_pil = Image.fromarray(
             frame
         )  # Converting CV2 frame to PIL friendly-information
-        self.display_info(frame_pil, motion, fps, "Poppins-Regular.ttf")
+        self.display_info(frame_pil, motion, fps, "static/Poppins-Regular.ttf")
         frame = np.array(
             frame_pil
         )  # Converting PIL friendly-information back into a CV2 frame

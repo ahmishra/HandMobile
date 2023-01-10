@@ -3,7 +3,7 @@ from imutils.video import VideoStream # Better video
 from camera import Camera # Importing camera module
 import serial  # To communicate with Arduino
 
-hardware_enabled = True  # If hardware is enabled
+hardware_enabled = False  # If hardware is enabled
 controller = "right" # Controlling hand
 if hardware_enabled:
     ser = serial.Serial("COM6", 9600) # Serial object
@@ -45,6 +45,6 @@ def credits():
 
 
 if __name__ == "__main__":
-    app.run(debug=False, use_reloader=False, host="0.0.0.0", port="5000")
+    app.run(debug=True, use_reloader=False, host="0.0.0.0", port="5000")
 
 # Aryan Mishra Copyright(C) 2022
