@@ -163,7 +163,7 @@ while True:  # Program loop
     prev_frame_time = new_frame_time
 
     if DRAW:  # To display extra informatio, (optional, requires DRAW to be activated)
-        fontpath = "Poppins-Regular.ttf"  # Font path
+        fontpath = "static/Poppins-Regular.ttf"  # Font path
         font = ImageFont.truetype(fontpath, 32)  # Intializing font
         frame_pil = Image.fromarray(
             frame
